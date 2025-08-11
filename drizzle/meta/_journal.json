@@ -15,6 +15,13 @@
       "when": 1754926141155,
       "tag": "0001_keen_avengers",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1754926593607,
+      "tag": "0002_dashing_norman_osborn",
+      "breakpoints": true
     }
   ]
 }
