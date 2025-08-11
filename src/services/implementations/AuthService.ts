@@ -3,6 +3,8 @@ import { userDao } from '../../dao/index';
 import { NewUser, User } from '@/src/db/schema/user';
 import httpStatus from 'http-status';
 import { logger } from '@/src/configs/logger';
+import * as jose from 'jose';
+import { generateAccessToken } from '@/src/helpers/GenerateToken';
 export default class AuthService {
   private userDao: IUserDao;
 
@@ -10,33 +12,37 @@ export default class AuthService {
     this.userDao = userDao;
   }
 
-  async login(email: string) {
+  async login(idToken: string) {
     try {
-      const user = await this.userDao.findByEmail(email);
+      const decodedToken = jose.decodeJwt(idToken) as Record<string, string>;
+
+      const user = await this.userDao.findByFirebaseUid(decodedToken.sub);
 
       if (!user) {
+        const newUser = await this.register({
+          firebase_uid: decodedToken.sub,
+          email: decodedToken.email,
+          displayName: decodedToken.name,
+          user_type: 'user',
+        });
+
+        const accessToken = await generateAccessToken(newUser);
+
         return {
-          statusCode: httpStatus.NOT_FOUND,
+          statusCode: httpStatus.CREATED,
           response: {
-            status: false,
-            code: httpStatus.NOT_FOUND,
-            message: 'User not found',
-            data: [],
+            status: true,
+            code: httpStatus.CREATED,
+            message: 'User not found, creating new user',
+            data: {
+              accessToken,
+              user: newUser,
+            },
           },
         };
       }
 
-      if (user.user_type !== 'admin') {
-        return {
-          statusCode: httpStatus.UNAUTHORIZED,
-          response: {
-            status: false,
-            code: httpStatus.UNAUTHORIZED,
-            message: 'Invalid role',
-            data: [],
-          },
-        };
-      }
+      const accessToken = await generateAccessToken(user);
 
       return {
         statusCode: httpStatus.OK,
@@ -44,7 +50,10 @@ export default class AuthService {
           status: true,
           code: httpStatus.OK,
           message: 'Login successful',
-          data: user,
+          data: {
+            accessToken,
+            user,
+          },
         },
       };
     } catch (error) {

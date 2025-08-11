@@ -1,9 +1,8 @@
 import IUserDao from '@/src/dao/contracts/IUserDao';
 import IUserService from '../contracts/IUserService';
-import { NewUser, User } from '@/src/db/schema/user';
+import { NewUser } from '@/src/db/schema/user';
 import { ApiServiceResponse } from '@/src/types/apiServiceResponse';
 import httpStatus from 'http-status';
-import bcrypt from 'bcrypt';
 import { logger } from '@/src/configs/logger';
 import UserDao from '@/src/dao/implementations/UserDao';
 import { db } from '@/src/configs/db';
@@ -30,14 +29,7 @@ export default class UserService implements IUserService {
         };
       }
 
-      const hashPassword = await bcrypt.hash(user.password, 12);
-
-      const newUser = await this.userDao.create({
-        ...user,
-        password: hashPassword,
-      });
-
-      const { password, ...safeUserData } = newUser;
+      const newUser = await this.userDao.create(user);
 
       return {
         statusCode: httpStatus.CREATED,
@@ -45,7 +37,7 @@ export default class UserService implements IUserService {
           status: true,
           code: httpStatus.CREATED,
           message: 'User created successfully',
-          data: safeUserData,
+          data: newUser,
         },
       };
     } catch (error) {
@@ -90,6 +82,25 @@ export default class UserService implements IUserService {
           status: true,
           code: httpStatus.OK,
           message: 'Email exists',
+          data: user,
+        },
+      };
+    } catch (error) {
+      logger.error(error);
+      throw error;
+    }
+  }
+
+  async getByFirebaseUid(firebaseUid: string): Promise<ApiServiceResponse> {
+    try {
+      const user = await this.userDao.findByFirebaseUid(firebaseUid);
+
+      return {
+        statusCode: httpStatus.OK,
+        response: {
+          status: true,
+          code: httpStatus.OK,
+          message: 'User found',
           data: user,
         },
       };

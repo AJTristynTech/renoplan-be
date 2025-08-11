@@ -23,6 +23,7 @@ async function seed() {
       .insert(users)
       .values(
         Array.from({ length: 5 }).map((_, i) => ({
+          firebase_uid: `firebase_uid_${i + 1}`,
           displayName: `User ${i + 1}`,
           email: `user${i + 1}@example.com`,
           user_type: i === 0 ? 'admin' : 'user',

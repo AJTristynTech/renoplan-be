@@ -28,6 +28,20 @@ export default class UserDao
     }
   }
 
+  async findByFirebaseUid(firebaseUid: string): Promise<User | undefined> {
+    try {
+      const result = await this.db
+        .select()
+        .from(users)
+        .where(eq(users.firebase_uid, firebaseUid))
+        .limit(1);
+      return result[0];
+    } catch (error) {
+      logger.error(error);
+      throw error;
+    }
+  }
+
   async isEmailExists(email: string): Promise<boolean> {
     try {
       const result = await this.db
@@ -66,15 +80,11 @@ export default class UserDao
     }
   }
 
-  async updatePassword(
-    userId: number,
-    hashedPassword: string,
-  ): Promise<User | undefined> {
+  async updatePassword(userId: number): Promise<User | undefined> {
     try {
       const result = await this.db
         .update(users)
         .set({
-          password: hashedPassword,
           updatedAt: new Date(),
         })
         .where(eq(users.id, userId))

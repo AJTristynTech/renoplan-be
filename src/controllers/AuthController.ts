@@ -46,8 +46,23 @@ export default class AuthConroller {
 
   login = async (req: Request, res: Response) => {
     try {
-      const { email } = req.body;
-      const user = await this.authService.login(email.toLowerCase());
+      const { idToken } = req.body;
+      const user = await this.authService.login(idToken);
+      const { message, data, status } = user.response;
+      const code = user.statusCode;
+      res.status(user.statusCode).send({ status, code, message, data });
+    } catch (e) {
+      logger.error(e);
+      res.status(httpStatus.BAD_GATEWAY).send(e);
+    }
+  };
+
+  me = async (req: Request, res: Response) => {
+    try {
+      const user = await this.userService.getByFirebaseUid(
+        // @ts-ignore
+        req?.user?.firebase_uid,
+      );
       const { message, data, status } = user.response;
       const code = user.statusCode;
       res.status(user.statusCode).send({ status, code, message, data });
