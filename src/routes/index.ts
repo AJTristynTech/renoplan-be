@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import authRoute from './authRoutes';
 import contractRoute from './contractRoutes';
+import projectRoute from './projectRoutes';
 const router = Router();
 
 const defaultRoutes = [
@@ -11,6 +12,10 @@ const defaultRoutes = [
   {
     path: '/contract',
     route: contractRoute,
+  },
+  {
+    path: '/project',
+    route: projectRoute,
   },
 ];
 

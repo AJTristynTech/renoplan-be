@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import * as jose from 'jose';
 import { User } from '../db/schema/user';
+import { logger } from '../configs/logger';
+import httpStatus from 'http-status';
 
 export const authMiddleware = async (
   req: Request,
@@ -11,7 +13,9 @@ export const authMiddleware = async (
     const token = req.headers.authorization?.split('Bearer ')[1];
 
     if (!token) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res
+        .status(httpStatus.UNAUTHORIZED)
+        .json({ message: 'Unauthorized' });
     }
 
     const decoded = await jose.jwtVerify(
@@ -23,6 +27,7 @@ export const authMiddleware = async (
 
     next();
   } catch (error) {
-    console.log('error', error);
+    logger.error(error);
+    res.status(httpStatus.BAD_GATEWAY).send(error);
   }
 };

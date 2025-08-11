@@ -19,7 +19,7 @@ export const projects = pgTable('projects', {
   user_id: integer().references(() => users.id),
   title: varchar({ length: 255 }).notNull(),
   address: varchar({ length: 255 }).notNull(),
-  project_type: projectType('project_type').notNull(),
+  project_type: projectType('project_type').notNull(), // home improvement, renovation, new construction, other
   createdAt: timestamp().notNull().defaultNow(),
   updatedAt: timestamp().notNull().defaultNow(),
 });
