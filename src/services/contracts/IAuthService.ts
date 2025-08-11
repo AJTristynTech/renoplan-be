@@ -1,6 +1,7 @@
 import { NewUser, User } from '@/src/db/schema/user';
+import { ApiServiceResponse } from '@/src/types/apiServiceResponse';
 
 export default interface IAuthService {
-  login(email: string, password: string): Promise<User>;
-  register(user: NewUser): Promise<User>;
+  login(idToken: string): Promise<ApiServiceResponse>;
+  register(user: NewUser): Promise<ApiServiceResponse>;
 }

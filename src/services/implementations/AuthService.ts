@@ -5,14 +5,16 @@ import httpStatus from 'http-status';
 import { logger } from '@/src/configs/logger';
 import * as jose from 'jose';
 import { generateAccessToken } from '@/src/helpers/GenerateToken';
-export default class AuthService {
+import IAuthService from '../contracts/IAuthService';
+import { ApiServiceResponse } from '@/src/types/apiServiceResponse';
+export default class AuthService implements IAuthService {
   private userDao: IUserDao;
 
   constructor() {
     this.userDao = userDao;
   }
 
-  async login(idToken: string) {
+  async login(idToken: string): Promise<ApiServiceResponse> {
     try {
       const decodedToken = jose.decodeJwt(idToken) as Record<string, string>;
 
@@ -26,7 +28,9 @@ export default class AuthService {
           user_type: 'user',
         });
 
-        const accessToken = await generateAccessToken(newUser);
+        const accessToken = await generateAccessToken(
+          newUser.response.data as User,
+        );
 
         return {
           statusCode: httpStatus.CREATED,
@@ -36,7 +40,7 @@ export default class AuthService {
             message: 'User not found, creating new user',
             data: {
               accessToken,
-              user: newUser,
+              user: newUser.response.data,
             },
           },
         };
@@ -70,19 +74,43 @@ export default class AuthService {
     }
   }
 
-  async register(user: NewUser): Promise<User> {
+  async register(user: NewUser): Promise<ApiServiceResponse> {
     const existingUser = await this.userDao.findByEmail(user.email);
 
     if (existingUser) {
-      throw new Error('User already exists');
+      return {
+        statusCode: httpStatus.BAD_REQUEST,
+        response: {
+          status: false,
+          code: httpStatus.BAD_REQUEST,
+          message: 'User already exists',
+          data: [],
+        },
+      };
     }
 
     const newUser = await this.userDao.create(user);
 
     if (!newUser) {
-      throw new Error('Failed to create user');
+      return {
+        statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+        response: {
+          status: false,
+          code: httpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Failed to create user',
+          data: [],
+        },
+      };
     }
 
-    return newUser;
+    return {
+      statusCode: httpStatus.CREATED,
+      response: {
+        status: true,
+        code: httpStatus.CREATED,
+        message: 'User created successfully',
+        data: newUser,
+      },
+    };
   }
 }

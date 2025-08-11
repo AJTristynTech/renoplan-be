@@ -21,9 +21,8 @@ export default class AuthConroller {
       const user: ApiServiceResponse = await this.userService.createUser(
         req.body,
       );
-      const { status } = user.response;
 
-      const { message, data } = user.response;
+      const { message, data, status } = user.response;
 
       res.status(user.statusCode).json({ status, message, data });
     } catch (error) {
