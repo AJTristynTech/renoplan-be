@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1754626855360,
-      "tag": "0000_bitter_silvermane",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1754627071566,
-      "tag": "0001_dear_morlun",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1754627097443,
-      "tag": "0002_grey_molecule_man",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1754924553512,
-      "tag": "0003_slimy_loki",
+      "when": 1754925191572,
+      "tag": "0000_low_tusk",
       "breakpoints": true
     }
   ]
