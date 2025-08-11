@@ -1,4 +1,10 @@
-import { integer, pgEnum, pgTable, varchar } from 'drizzle-orm/pg-core';
+import {
+  integer,
+  pgEnum,
+  pgTable,
+  timestamp,
+  varchar,
+} from 'drizzle-orm/pg-core';
 import { users } from './user';
 
 export const projectType = pgEnum('project_type', [
@@ -14,6 +20,8 @@ export const projects = pgTable('projects', {
   title: varchar({ length: 255 }).notNull(),
   address: varchar({ length: 255 }).notNull(),
   project_type: projectType('project_type').notNull(),
+  createdAt: timestamp().notNull().defaultNow(),
+  updatedAt: timestamp().notNull().defaultNow(),
 });
 
 export type Project = typeof projects.$inferSelect;
