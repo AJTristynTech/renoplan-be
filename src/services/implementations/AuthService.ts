@@ -1,9 +1,7 @@
 import IUserDao from '@/src/dao/contracts/IUserDao';
 import { userDao } from '../../dao/index';
 import { NewUser, User } from '@/src/db/schema/user';
-import UserDao from '@/src/dao/implementations/UserDao';
 import httpStatus from 'http-status';
-import bcrypt from 'bcrypt';
 import { logger } from '@/src/configs/logger';
 export default class AuthService {
   private userDao: IUserDao;
@@ -12,7 +10,7 @@ export default class AuthService {
     this.userDao = userDao;
   }
 
-  async login(email: string, password: string) {
+  async login(email: string) {
     try {
       const user = await this.userDao.findByEmail(email);
 
@@ -28,21 +26,17 @@ export default class AuthService {
         };
       }
 
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-
-      if (!isPasswordValid) {
+      if (user.user_type !== 'admin') {
         return {
           statusCode: httpStatus.UNAUTHORIZED,
           response: {
             status: false,
             code: httpStatus.UNAUTHORIZED,
-            message: 'Invalid password',
+            message: 'Invalid role',
             data: [],
           },
         };
       }
-
-      const { password: _, ...userData } = user;
 
       return {
         statusCode: httpStatus.OK,
@@ -50,7 +44,7 @@ export default class AuthService {
           status: true,
           code: httpStatus.OK,
           message: 'Login successful',
-          data: userData,
+          data: user,
         },
       };
     } catch (error) {

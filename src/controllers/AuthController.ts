@@ -46,8 +46,8 @@ export default class AuthConroller {
 
   login = async (req: Request, res: Response) => {
     try {
-      const { email, password } = req.body;
-      const user = await this.authService.login(email.toLowerCase(), password);
+      const { email } = req.body;
+      const user = await this.authService.login(email.toLowerCase());
       const { message, data, status } = user.response;
       const code = user.statusCode;
       res.status(user.statusCode).send({ status, code, message, data });

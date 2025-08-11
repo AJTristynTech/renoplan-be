@@ -1,6 +1,6 @@
 {
-  "id": "de52b003-90de-4787-9c52-e51172043493",
-  "prevId": "3ae2ac2a-484d-405f-a030-4d8cacafa2ba",
+  "id": "a3d30e69-411c-42f0-8daa-1ac68570d082",
+  "prevId": "473ee298-cfd8-4c48-baef-773f66d3c7f8",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -25,8 +25,8 @@
             "cycle": false
           }
         },
-        "name": {
-          "name": "name",
+        "username": {
+          "name": "username",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
@@ -37,11 +37,12 @@
           "primaryKey": false,
           "notNull": true
         },
-        "password": {
-          "name": "password",
+        "role": {
+          "name": "role",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "'user'"
         },
         "createdAt": {
           "name": "createdAt",
