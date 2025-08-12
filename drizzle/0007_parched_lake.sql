@@ -1,0 +1,1 @@
+ALTER TABLE "work_areas" ALTER COLUMN "description" DROP NOT NULL;

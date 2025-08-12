@@ -12,7 +12,7 @@ export const workAreas = pgTable(
   {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     name: varchar({ length: 255 }).notNull(),
-    description: varchar({ length: 255 }).notNull(),
+    description: varchar({ length: 255 }),
     scope_type: varchar({ length: 255 }).notNull(), // 'interior', 'exterior'
     is_active: boolean().notNull().default(true),
     createdAt: timestamp().notNull().defaultNow(),

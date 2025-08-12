@@ -1,10 +1,10 @@
-import { db } from '../../configs/db';
-import { users } from './user';
-import { projects } from './project';
-import { contracts } from './contracts';
-import { workAreas } from './work-areas';
-import { trades } from './trades';
-import { workAreaTrade } from './work_area_trade';
+import { db } from '@configs/db';
+import { users } from '@schema/user';
+import { projects } from '@schema/project';
+import { contracts } from '@schema/contracts';
+import { workAreas } from '@schema/work-areas';
+import { trades } from '@schema/trades';
+import { workAreaTrade } from '@schema/work_area_trade';
 
 async function seed() {
   console.log('Seeding database...');
@@ -49,12 +49,14 @@ async function seed() {
               user_id: u.id,
               title: `Project ${u.id}-A`,
               address: `${100 + u.id} Main St, Hometown`,
+              duration: '3_months',
               project_type: firstType,
             },
             {
               user_id: u.id,
               title: `Project ${u.id}-B`,
               address: `${200 + u.id} Oak Ave, Hometown`,
+              duration: '6_months',
               project_type: secondType,
             },
           ];
@@ -214,7 +216,7 @@ async function seed() {
   console.log('Seeding complete.');
 }
 
-// seed().catch((err) => {
-//   console.error(err);
-//   process.exit(1);
-// });
+seed().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
