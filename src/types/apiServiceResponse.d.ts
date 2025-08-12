@@ -5,6 +5,11 @@ export declare type ApiServiceResponse = {
     code: number;
     message: string;
     data?: [] | object;
+    pagination?: {
+      limit?: number;
+      offset?: number;
+      total?: number;
+    };
   };
 };
 

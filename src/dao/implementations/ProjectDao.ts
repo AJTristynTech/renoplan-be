@@ -1,6 +1,6 @@
 import { NewProject, Project, projects } from '@/src/db/schema/project';
 import SuperDao from './SuperDao';
-import IProjectDao from '../contracts/IProject';
+import IProjectDao from '../contracts/IProjectDao';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { logger } from '@/src/configs/logger';
 import { eq } from 'drizzle-orm';

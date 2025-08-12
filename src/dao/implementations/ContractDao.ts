@@ -1,6 +1,6 @@
 import { Contract, contracts, NewContract } from '@/src/db/schema/contracts';
 import SuperDao from './SuperDao';
-import IContractDao from '../contracts/IContract';
+import IContractDao from '../contracts/IContractDao';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { eq } from 'drizzle-orm';
 import { logger } from '@/src/configs/logger';

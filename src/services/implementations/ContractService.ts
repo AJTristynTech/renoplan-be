@@ -1,4 +1,4 @@
-import IContractDao from '@/src/dao/contracts/IContract';
+import IContractDao from '@/src/dao/contracts/IContractDao';
 import IContractService from '../contracts/IContractService';
 import { ApiServiceResponse } from '@/src/types/apiServiceResponse';
 import { Contract, NewContract } from '@/src/db/schema/contracts';

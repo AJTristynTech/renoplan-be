@@ -214,7 +214,7 @@ async function seed() {
   console.log('Seeding complete.');
 }
 
-seed().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+// seed().catch((err) => {
+//   console.error(err);
+//   process.exit(1);
+// });
