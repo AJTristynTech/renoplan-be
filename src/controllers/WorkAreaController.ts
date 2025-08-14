@@ -12,7 +12,10 @@ export default class WorkAreaController {
 
   getWorkAreas = async (req: Request, res: Response) => {
     try {
-      const { limit, offset } = req.query;
+      const { limit = 10, page = 1 } = req.query;
+
+      const offset = (Number(page) - 1) * Number(limit);
+
       const workAreas = await this.workAreaService.getWorkAreas(
         Number(limit),
         Number(offset),

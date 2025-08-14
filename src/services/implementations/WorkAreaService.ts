@@ -201,6 +201,7 @@ export default class WorkAreaService implements IWorkAreaService {
   async getTradesForWorkArea(workAreaId: number): Promise<ApiServiceResponse> {
     try {
       const trades = await this.workAreaDao.getTradesForWorkArea(workAreaId);
+      const workArea = await this.workAreaDao.getWorkAreaById(workAreaId);
 
       return {
         statusCode: httpStatus.OK,
@@ -208,7 +209,15 @@ export default class WorkAreaService implements IWorkAreaService {
           status: true,
           code: httpStatus.OK,
           message: 'Trades fetched successfully',
-          data: trades,
+          data: {
+            trades,
+            workArea: {
+              id: workArea?.id,
+              name: workArea?.name,
+              description: workArea?.description,
+              scopeType: workArea?.scope_type,
+            },
+          },
         },
       };
     } catch (error) {
